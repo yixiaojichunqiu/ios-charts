@@ -163,6 +163,7 @@ open class Transformer: NSObject
         )
     }
     
+    //值到像素的反矩阵
     @objc open var pixelToValueMatrix: CGAffineTransform
     {
         return valueToPixelMatrix.inverted()

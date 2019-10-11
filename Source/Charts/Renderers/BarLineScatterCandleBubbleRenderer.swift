@@ -47,13 +47,13 @@ open class BarLineScatterCandleBubbleRenderer: DataRenderer
     /// Class representing the bounds of the current viewport in terms of indices in the values array of a DataSet.
     open class XBounds
     {
-        /// minimum visible entry index
+        /// minimum visible entry index 最小
         open var min: Int = 0
 
-        /// maximum visible entry index
+        /// maximum visible entry index 最大
         open var max: Int = 0
 
-        /// range of visible entry indices
+        /// range of visible entry indices 范围
         open var range: Int = 0
 
         public init()
@@ -69,6 +69,7 @@ open class BarLineScatterCandleBubbleRenderer: DataRenderer
         }
         
         /// Calculates the minimum and maximum x values as well as the range between them.
+        // 根据传来的lowestVisibleX highestVisibleX 更新
         open func set(chart: BarLineScatterCandleBubbleChartDataProvider,
                       dataSet: IBarLineScatterCandleBubbleChartDataSet,
                       animator: Animator?)
@@ -100,6 +101,7 @@ extension BarLineScatterCandleBubbleRenderer.XBounds: RangeExpression {
     }
 }
 
+//让类有数组那种for循环的逻辑
 extension BarLineScatterCandleBubbleRenderer.XBounds: Sequence {
     public struct Iterator: IteratorProtocol {
         private var iterator: IndexingIterator<ClosedRange<Int>>

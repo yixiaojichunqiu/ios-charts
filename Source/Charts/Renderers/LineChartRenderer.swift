@@ -315,7 +315,7 @@ open class LineChartRenderer: LineRadarRenderer
                 _lineSegments = [CGPoint](repeating: CGPoint(), count: pointsPerEntryPair)
             }
 
-        for j in _xBounds.dropLast()
+        for j in _xBounds.dropLast()//根据_xBounds里的range 进行对应的for循环数量
         {
             var e: ChartDataEntry! = dataSet.entryForIndex(j)
             
@@ -371,6 +371,7 @@ open class LineChartRenderer: LineRadarRenderer
             
             // get the color that is set for this line-segment
             context.setStrokeColor(dataSet.color(atIndex: j).cgColor)
+            //画线段
             context.strokeLineSegments(between: _lineSegments)
         }
         
@@ -389,6 +390,7 @@ open class LineChartRenderer: LineRadarRenderer
         
         if dataSet.fill != nil
         {
+            //填充
             drawFilledPath(context: context, path: filled, fill: dataSet.fill!, fillAlpha: dataSet.fillAlpha)
         }
         else
@@ -406,8 +408,9 @@ open class LineChartRenderer: LineRadarRenderer
         
         var e: ChartDataEntry!
         
+        //裁剪线的填充区域的path
         let filled = CGMutablePath()
-        
+        //bounds的min
         e = dataSet.entryForIndex(bounds.min)
         if e != nil
         {
@@ -416,6 +419,7 @@ open class LineChartRenderer: LineRadarRenderer
         }
         
         // create a new path
+        //for循环bounds.min+1开始
         for x in stride(from: (bounds.min + 1), through: bounds.range + bounds.min, by: 1)
         {
             guard let e = dataSet.entryForIndex(x) else { continue }

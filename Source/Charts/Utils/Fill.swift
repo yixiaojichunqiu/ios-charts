@@ -271,6 +271,7 @@ open class Fill: NSObject
             context.clip()
             context.draw(_layer!, in: rect)
             
+        //线性渐变
         case .linearGradient:
             
             let radians = (360.0 - _gradientAngle).DEG2RAD
@@ -286,6 +287,7 @@ open class Fill: NSObject
                 y: centerPoint.y + yAngleDelta
             )
             
+            //裁剪成对应的形状
             context.clip()
             context.drawLinearGradient(_gradient!,
                 start: startPoint,

@@ -210,9 +210,9 @@ open class HorizontalBarChartView: BarChartView
         var pt = CGPoint(
             x: viewPortHandler.contentLeft,
             y: viewPortHandler.contentBottom)
-        
+        //根据transform 算 应用像素到值的矩阵
         getTransformer(forAxis: .left).pixelToValues(&pt)
-        
+        //有限制 不能小于最小
         return max(xAxis._axisMinimum, Double(pt.y))
     }
     

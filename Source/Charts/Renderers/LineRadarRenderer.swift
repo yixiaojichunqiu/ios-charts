@@ -26,6 +26,7 @@ open class LineRadarRenderer: LineScatterCandleRadarRenderer
         
         context.saveGState()
         context.beginPath()
+        //加入对应的path
         context.addPath(path)
         
         // filled is usually drawn with less alpha
