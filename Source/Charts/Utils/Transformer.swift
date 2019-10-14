@@ -32,7 +32,7 @@ open class Transformer: NSObject
     /// Prepares the matrix that transforms values to pixels. Calculates the scale factors from the charts size and offsets.
     @objc open func prepareMatrixValuePx(chartXMin: Double, deltaX: CGFloat, deltaY: CGFloat, chartYMin: Double)
     {
-        var scaleX = (_viewPortHandler.contentWidth / deltaX)
+        var scaleX = (_viewPortHandler.contentWidth / deltaX)//x分成多少份
         var scaleY = (_viewPortHandler.contentHeight / deltaY)
         
         if CGFloat.infinity == scaleX
@@ -46,7 +46,7 @@ open class Transformer: NSObject
 
         // setup all matrices
         _matrixValueToPx = CGAffineTransform.identity
-        _matrixValueToPx = _matrixValueToPx.scaledBy(x: scaleX, y: -scaleY)
+        _matrixValueToPx = _matrixValueToPx.scaledBy(x: scaleX, y: -scaleY)//把矩阵翻过去
         _matrixValueToPx = _matrixValueToPx.translatedBy(x: CGFloat(-chartXMin), y: CGFloat(-chartYMin))
     }
 
@@ -55,6 +55,7 @@ open class Transformer: NSObject
     {
         if !inverted
         {
+            //把翻过去的 移动回来
             _matrixOffset = CGAffineTransform(translationX: _viewPortHandler.offsetLeft, y: _viewPortHandler.chartHeight - _viewPortHandler.offsetBottom)
         }
         else

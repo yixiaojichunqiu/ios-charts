@@ -259,7 +259,7 @@ open class ViewPortHandler: NSObject
     {
         _touchMatrix = newMatrix
         
-        // make sure scale and translation are within their bounds
+        // make sure scale and translation are within their bounds 边界检测
         limitTransAndScale(matrix: &_touchMatrix, content: _contentRect)
         
         chart.setNeedsDisplay()
@@ -399,7 +399,7 @@ open class ViewPortHandler: NSObject
         limitTransAndScale(matrix: &_touchMatrix, content: _contentRect)
     }
 
-    @objc open var touchMatrix: CGAffineTransform
+    @objc open var touchMatrix: CGAffineTransform//touch导致的变化矩阵
     {
         return _touchMatrix
     }

@@ -468,6 +468,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             offsetBottom += self.extraBottomOffset
             offsetLeft += self.extraLeftOffset
 
+            //更新_contentRect
             _viewPortHandler.restrainViewPort(
                 offsetLeft: max(self.minOffset, offsetLeft),
                 offsetTop: max(self.minOffset, offsetTop),
@@ -475,8 +476,8 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
                 offsetBottom: max(self.minOffset, offsetBottom))
         }
         
-        prepareOffsetMatrix()
-        prepareValuePxMatrix()
+        prepareOffsetMatrix()//翻转的挪回来 矩阵准备好
+        prepareValuePxMatrix()//左右坐标轴分份翻转 矩阵准备好
     }
     
     /// draws the grid background
@@ -624,7 +625,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         {
             if _isScaling
             {
-                _isScaling = false
+                _isScaling = false//缩放中这个状态 赋值false
                 
                 // Range might have changed, which means that Y-axis labels could have changed in size, affecting Y-axis size. So we need to recalculate offsets.
                 calculateOffsets()
@@ -658,13 +659,14 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
                     let scaleX = canZoomMoreX ? recognizer.nsuiScale : 1.0
                     let scaleY = canZoomMoreY ? recognizer.nsuiScale : 1.0
                     
-                    //缩放
+                    //以某点缩放的矩阵
                     var matrix = CGAffineTransform(translationX: location.x, y: location.y)
                     matrix = matrix.scaledBy(x: scaleX, y: scaleY)
                     matrix = matrix.translatedBy(x: -location.x, y: -location.y)
                     
                     matrix = _viewPortHandler.touchMatrix.concatenating(matrix)
                     
+                    //更新矩阵 里面封装着边界检测之类的
                     _viewPortHandler.refresh(newMatrix: matrix, chart: self, invalidate: true)
                     
                     if delegate !== nil
@@ -781,9 +783,9 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
                     stopDeceleration()
                     
                     _decelerationLastTime = CACurrentMediaTime()
-                    _decelerationVelocity = recognizer.velocity(in: self)
+                    _decelerationVelocity = recognizer.velocity(in: self)//手势速度
                     
-                    _decelerationDisplayLink = NSUIDisplayLink(target: self, selector: #selector(BarLineChartViewBase.decelerationLoop))
+                    _decelerationDisplayLink = NSUIDisplayLink(target: self, selector: #selector(BarLineChartViewBase.decelerationLoop))//滑动逐渐停止的动画
                     _decelerationDisplayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
                 }
                 
@@ -829,7 +831,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         }
         
         // Did we managed to actually drag or did we reach the edge?
-        return matrix.tx != originalMatrix.tx || matrix.ty != originalMatrix.ty
+        return matrix.tx != originalMatrix.tx || matrix.ty != originalMatrix.ty//如果相等说明没变化
     }
     
     private func isTouchInverted() -> Bool
@@ -852,17 +854,17 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     {
         let currentTime = CACurrentMediaTime()
         
-        _decelerationVelocity.x *= self.dragDecelerationFrictionCoef
-        _decelerationVelocity.y *= self.dragDecelerationFrictionCoef
+        _decelerationVelocity.x *= self.dragDecelerationFrictionCoef//x方向速度
+        _decelerationVelocity.y *= self.dragDecelerationFrictionCoef//y方向速度
         
-        let timeInterval = CGFloat(currentTime - _decelerationLastTime)
+        let timeInterval = CGFloat(currentTime - _decelerationLastTime)//间隔时间 δt
         
         let distance = CGPoint(
-            x: _decelerationVelocity.x * timeInterval,
-            y: _decelerationVelocity.y * timeInterval
+            x: _decelerationVelocity.x * timeInterval,//x方向移动的距离
+            y: _decelerationVelocity.y * timeInterval//y方向移动的距离
         )
         
-        if !performPanChange(translation: distance)
+        if !performPanChange(translation: distance)//到边界速度直接降0
         {
             // We reached the edge, stop
             _decelerationVelocity.x = 0.0
@@ -873,9 +875,11 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         
         if abs(_decelerationVelocity.x) < 0.001 && abs(_decelerationVelocity.y) < 0.001
         {
+            //速度自然降到很低 执行停止
             stopDeceleration()
             
             // Range might have changed, which means that Y-axis labels could have changed in size, affecting Y-axis size. So we need to recalculate offsets.
+            //重新计算offset
             calculateOffsets()
             setNeedsDisplay()
         }
