@@ -44,6 +44,7 @@ open class CombinedChartRenderer: DataRenderer
 
         for order in drawOrder
         {
+            //根据类型 把不同的render装入 renders数组
             switch (order)
             {
             case .bar:
@@ -85,6 +86,7 @@ open class CombinedChartRenderer: DataRenderer
 
     }
     
+    //遍历renders 各个render 自己调用自己的代码
     open override func initBuffers()
     {
         _renderers.forEach { $0.initBuffers() }

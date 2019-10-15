@@ -189,10 +189,12 @@ open class CombinedChartView: BarLineChartViewBase, CombinedChartDataProvider
     {
         get
         {
+            //从render中拿DrawOrder数组 遍历 拿其数字
             return (renderer as! CombinedChartRenderer).drawOrder.map { $0.rawValue }
         }
         set
         {
+            //把DrawOrder数字 赋值到render
             (renderer as! CombinedChartRenderer).drawOrder = newValue.map { DrawOrder(rawValue: $0)! }
         }
     }
