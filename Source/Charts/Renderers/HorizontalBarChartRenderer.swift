@@ -132,7 +132,7 @@ open class HorizontalBarChartRenderer: BarChartRenderer
                 var yStart = 0.0
                 
                 // fill the stack
-                for k in 0 ..< vals!.count
+                for k in 0 ..< vals!.count//横向有负值方向柱的图 两个数据
                 {
                     let value = vals![k]
                     
@@ -173,6 +173,7 @@ open class HorizontalBarChartRenderer: BarChartRenderer
                     barRect.origin.y = top
                     barRect.size.height = bottom - top
                     
+                    //把算好的rect 存到buffer的rects里
                     buffer.rects[bufferIndex] = barRect
                     bufferIndex += 1
                 }
